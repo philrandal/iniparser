@@ -257,13 +257,13 @@ double iniparser_getdouble(const dictionary * d, const char * key, double notfou
   ini file is given as "section:key". If the key cannot be found,
   the notfound value is returned.
 
-  A true boolean is found if one of the following is matched:
+  A true boolean is found if one of the following is matched (ase insensitive):
 
   - A string starting with 'y'
-  - A string starting with 'Y'
   - A string starting with 't'
-  - A string starting with 'T'
   - A string starting with '1'
+    A string starting with 'on'
+    A string starting with 'off'
 
   A false boolean is found if one of the following is matched:
 

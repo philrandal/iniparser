@@ -549,17 +549,28 @@ double iniparser_getdouble(const dictionary * d, const char * key, double notfou
 /*--------------------------------------------------------------------------*/
 int iniparser_getboolean(const dictionary * d, const char * key, int notfound)
 {
-    int          ret ;
+    int          ret = notfound;
     const char * c ;
+    char         ch;
 
     c = iniparser_getstring(d, key, INI_INVALID_KEY);
     if (c==INI_INVALID_KEY) return notfound ;
-    if (c[0]=='y' || c[0]=='Y' || c[0]=='1' || c[0]=='t' || c[0]=='T') {
+    ch = tolower(c[0]);
+    if (ch=='y' || ch=='t' || ch=='1') {
         ret = 1 ;
-    } else if (c[0]=='n' || c[0]=='N' || c[0]=='0' || c[0]=='f' || c[0]=='F') {
+    } else if (ch=='n' || ch=='f' || ch=='0') {
         ret = 0 ;
     } else {
-        ret = notfound ;
+        // allow 'on' and 'off'
+        if (ch=='o') {
+            if (tolower(c[1]=='n') {
+                ret = 1;
+            } else if (strlen(c)>2) {
+                if (tolower(c[1])=='f' && tolower(c[2])=='f') {
+                  ret =0;
+               }
+            }
+        }
     }
     return ret;
 }
