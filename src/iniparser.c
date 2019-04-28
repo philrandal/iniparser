@@ -561,9 +561,9 @@ int iniparser_getboolean(const dictionary * d, const char * key, int notfound)
     } else if (ch=='n' || ch=='f' || ch=='0') {
         ret = 0 ;
     } else {
-        // allow 'on' and 'off'
+        /* allow 'on' and 'off' */
         if (ch=='o') {
-            if (tolower(c[1]=='n') {
+            if (tolower(c[1])=='n') {
                 ret = 1;
             } else if (strlen(c)>2) {
                 if (tolower(c[1])=='f' && tolower(c[2])=='f') {
