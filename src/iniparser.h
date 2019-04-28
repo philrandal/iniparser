@@ -336,6 +336,23 @@ int iniparser_find_entry(const dictionary * ini, const char * entry) ;
   The returned dictionary must be freed using iniparser_freedict().
  */
 /*--------------------------------------------------------------------------*/
+dictionary * iniparser_merge(dictionary * dict, const char * ininame);
+
+/*-------------------------------------------------------------------------*/
+/**
+  @brief    Parse an ini file and merge into an existing dictionary object
+  @param    dict Name of the dictionary to merge into.
+  @param    ininame Name of the ini file to read.
+  @return   Pointer to newly allocated dictionary
+
+  This is the parser for ini files. This function is called, providing
+  the name of the file to be read. It returns a dictionary object that
+  should not be accessed directly, but through accessor functions
+  instead.
+
+  The returned dictionary must be freed using iniparser_freedict().
+ */
+/*--------------------------------------------------------------------------*/
 dictionary * iniparser_load(const char * ininame);
 
 /*-------------------------------------------------------------------------*/

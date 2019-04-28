@@ -700,6 +700,7 @@ static line_status iniparser_line(
 /*-------------------------------------------------------------------------*/
 /**
   @brief    Parse an ini file and return an allocated dictionary object
+  @param    dict Name of the dictionary to merge into.
   @param    ininame Name of the ini file to read.
   @return   Pointer to newly allocated dictionary
 
@@ -711,7 +712,7 @@ static line_status iniparser_line(
   The returned dictionary must be freed using iniparser_freedict().
  */
 /*--------------------------------------------------------------------------*/
-dictionary * iniparser_load(const char * ininame)
+dictionary * iniparser_merge(dictionary * dict, const char * ininame)
 {
     FILE * in ;
 
@@ -727,17 +728,17 @@ dictionary * iniparser_load(const char * ininame)
     int  errs=0;
     int  mem_err=0;
 
-    dictionary * dict ;
-
     if ((in=fopen(ininame, "r"))==NULL) {
         iniparser_error_callback("iniparser: cannot open %s\n", ininame);
         return NULL ;
     }
 
-    dict = dictionary_new(0) ;
     if (!dict) {
-        fclose(in);
-        return NULL ;
+        dict = dictionary_new(0) ;
+        if (!dict) {
+            fclose(in);
+            return NULL ;
+        }
     }
 
     memset(line,    0, ASCIILINESZ);
@@ -819,6 +820,24 @@ dictionary * iniparser_load(const char * ininame)
     return dict ;
 }
 
+/*-------------------------------------------------------------------------*/
+/**
+  @brief    Parse an ini file and return an allocated dictionary object
+  @param    ininame Name of the ini file to read.
+  @return   Pointer to newly allocated dictionary
+
+  This is the parser for ini files. This function is called, providing
+  the name of the file to be read. It returns a dictionary object that
+  should not be accessed directly, but through accessor functions
+  instead.
+
+  The returned dictionary must be freed using iniparser_freedict().
+ */
+/*--------------------------------------------------------------------------*/
+dictionary * iniparser_load(const char * ininame)
+{
+    return iniparser_merge(NULL, ininame);
+}
 /*-------------------------------------------------------------------------*/
 /**
   @brief    Free all memory associated to an ini dictionary
