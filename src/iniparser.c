@@ -272,7 +272,13 @@ void iniparser_dump_ini(const dictionary * d, FILE * f)
                 continue ;
             /* add correct fix for https://github.com/ndevilla/iniparser/pull/86 */
 	    offset = (*(d->key[i]) == ':') ? 1 : 0;
-            fprintf(f, "%s = %s\n", d->key[i] + offset, d->val[i]);
+            /* Fix for https://github.com/ndevilla/iniparser/issues/97
+               quote output value if it contains ";" or "#" */
+            if (strchr(d->val[i],';') || strchr(d->val[i],'#')) {
+                fprintf(f, "%s = \"%s\"\n", d->key[i] + offset, d->val[i]);
+	    } else {
+                fprintf(f, "%s = %s\n", d->key[i] + offset, d->val[i]);
+	    }
         }
         return ;
     }
@@ -312,10 +318,19 @@ void iniparser_dumpsection_ini(const dictionary * d, const char * s, FILE * f)
         if (d->key[j]==NULL)
             continue ;
         if (!strncmp(d->key[j], keym, seclen+1)) {
-            fprintf(f,
-                    "%-30s = %s\n",
-                    d->key[j]+seclen+1,
-                    d->val[j] ? d->val[j] : "");
+            /* Fix for https://github.com/ndevilla/iniparser/issues/97
+               quote output value if it contains ";" or "#" */
+            if (strchr(d->val[j],';') || strchr(d->val[j],'#')) {
+                fprintf(f,
+                        "%-30s = \"%s\"\n",
+                        d->key[j]+seclen+1,
+                        d->val[j] ? d->val[j] : "");
+	} else {
+                fprintf(f,
+                        "%-30s = %s\n",
+                        d->key[j]+seclen+1,
+                        d->val[j] ? d->val[j] : "");
+	    }
         }
     }
     fprintf(f, "\n");
