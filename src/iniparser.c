@@ -259,6 +259,7 @@ void iniparser_dump_ini(const dictionary * d, FILE * f)
 {
     int          i ;
     int          nsec ;
+    int          offset;
     const char * secname ;
 
     if (d==NULL || f==NULL) return ;
@@ -269,7 +270,9 @@ void iniparser_dump_ini(const dictionary * d, FILE * f)
         for (i=0 ; i<d->size ; i++) {
             if (d->key[i]==NULL)
                 continue ;
-            fprintf(f, "%s = %s\n", d->key[i], d->val[i]);
+            /* add correct fix for https://github.com/ndevilla/iniparser/pull/86 */
+	    offset = (*(d->key[i]) == ':') ? 1 : 0;
+            fprintf(f, "%s = %s\n", d->key[i] + offset, d->val[i]);
         }
         return ;
     }
