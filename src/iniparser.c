@@ -325,12 +325,12 @@ void iniparser_dumpsection_ini(const dictionary * d, const char * s, FILE * f)
                         "%-30s = \"%s\"\n",
                         d->key[j]+seclen+1,
                         d->val[j] ? d->val[j] : "");
-	} else {
+            } else {
                 fprintf(f,
                         "%-30s = %s\n",
                         d->key[j]+seclen+1,
                         d->val[j] ? d->val[j] : "");
-	    }
+            }
         }
     }
     fprintf(f, "\n");
