@@ -570,7 +570,8 @@ int iniparser_getboolean(const dictionary * d, const char * key, int notfound)
     char         ch;
 
     c = iniparser_getstring(d, key, INI_INVALID_KEY);
-    if (c==INI_INVALID_KEY) return notfound ;
+    if (!c) return notfound;
+    if (c==INI_INVALID_KEY) return notfound;
     ch = tolower(c[0]);
     if (ch=='y' || ch=='t' || ch=='1') {
         ret = 1 ;
